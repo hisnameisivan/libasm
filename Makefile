@@ -6,14 +6,16 @@
 #    By: ivan <ivan@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/06 02:31:28 by ivan              #+#    #+#              #
-#    Updated: 2021/07/18 18:39:42 by ivan             ###   ########.fr        #
+#    Updated: 2021/08/16 01:43:24 by ivan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= libasm.a
 ASM			= nasm
 ASMFLAGS	= -f elf64
-ASMSRC		= ft_strlen.s
+ASMSRC		= ft_strlen.s\
+			  ft_strcpy.s\
+			  ft_strcmp.s
 
 TESTNAME	= test_libasm
 CC			= clang
@@ -25,8 +27,11 @@ MAINOBJ	= $(MAIN:%.c=%.o)
 
 all: $(NAME)
 
-$(ASMOBJ): $(ASMSRC)
-	$(ASM) $(ASMFLAGS) $(ASMSRC)
+# $(ASMOBJ): $(ASMSRC)
+# 	$(ASM) $(ASMFLAGS) $(ASMSRC)
+
+%.o: %.s
+	$(ASM) $(ASMFLAGS) $<
 
 $(NAME): $(ASMOBJ)
 	ar rc $(NAME) $?
@@ -46,7 +51,7 @@ test: $(TESTNAME) # $(NAME)
 $(MAINOBJ): $(MAIN)
 	$(CC) $(CCFLAGS) -c $< -o $@
 
-$(TESTNAME): $(MAINOBJ) # $(ASMOBJ)
+$(TESTNAME): $(MAINOBJ) $(NAME) # $(ASMOBJ)
 	$(CC) $(CCFLAGS) $< $(NAME) -o $(TESTNAME)
 
 .PHONY: all clean fclean re bonus test
