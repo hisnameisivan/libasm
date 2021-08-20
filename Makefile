@@ -6,7 +6,7 @@
 #    By: ivan <ivan@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/06 02:31:28 by ivan              #+#    #+#              #
-#    Updated: 2021/08/16 01:43:24 by ivan             ###   ########.fr        #
+#    Updated: 2021/08/21 02:39:45 by ivan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ ASM			= nasm
 ASMFLAGS	= -f elf64
 ASMSRC		= ft_strlen.s\
 			  ft_strcpy.s\
-			  ft_strcmp.s
+			  ft_strcmp.s\
+			  ft_write.s
 
 TESTNAME	= test_libasm
 CC			= clang
@@ -41,6 +42,7 @@ clean:
 
 fclean: clean
 	rm -f $(NAME) $(TESTNAME)
+	rm -f ft_write_test
 
 re: fclean all
 
