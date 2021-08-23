@@ -6,7 +6,7 @@
 /*   By: ivan <ivan@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/25 16:37:35 by ivan              #+#    #+#             */
-/*   Updated: 2021/08/21 01:53:27 by ivan             ###   ########.fr       */
+/*   Updated: 2021/08/23 03:19:07 by ivan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,14 @@
 size_t	ft_strlen(const char *str);
 char	*ft_strcpy(char *dst, const char *src);
 int		ft_strcmp(const char *s1, const char *s2);
-// ssize_t	ft_write(int fd, const void* buf, size_t count) {
-// 	return write(fd, buf, count);
-// }
-ssize_t	ft_write(int fd, const void* buf, size_t count);
+ssize_t	ft_write(int fd, const void *buf, size_t count);
+ssize_t	ft_read(int fd, const void *buf, size_t count)
+{
+	char	*b;
+	b = (char *)buf;
+	return read(fd, (void *)b, count);
+}
+// ssize_t	ft_read(int fd, const void* buf, size_t count);
 
 void	test_strlen(void)
 {
@@ -43,7 +47,7 @@ void	test_strlen(void)
 	i = 0;
 	while (tests[i] != NULL)
 	{
-		printf("test strlen №%d: %s\n", i, tests[i]);
+		printf("test strlen №%d: %s\n", i + 1, tests[i]);
 		printf("strlen    : %u\n", (unsigned int)strlen(tests[i]));
 		printf("ft_strlen : %u\n", (unsigned int)ft_strlen(tests[i]));
 		assert((int)(strlen(tests[i]) - ft_strlen(tests[i])) == 0);
@@ -70,7 +74,7 @@ void	test_strcpy(void)
 	i = 0;
 	while (tests[i] != NULL)
 	{
-		printf("test strcpy №%d\n", i);
+		printf("test strcpy №%d\n", i + 1);
 		buf = (char *)malloc(sizeof(char) * strlen(tests[i]) + 1);
 		ft_strcpy(buf, tests[i]);
 		printf("original  : %s$	len : %u\n", tests[i], (unsigned int)strlen(tests[i]));
@@ -100,7 +104,7 @@ void	test_strcmp(void)
 	i = 0;
 	while (tests[i] != NULL)
 	{
-		printf("test strcmp №%d\n", i);
+		printf("test strcmp №%d\n", i + 1);
 		if (i % 2 != 0)
 		{
 			j = i - 1;
@@ -155,13 +159,13 @@ void	test_write()
 	fd = creat("ft_write_test", S_IRWXU);
 	while (tests[i] != NULL)
 	{
-		printf("test write №%d: %s\n", i, tests[i]);
+		printf("test write №%d: %s\n", i + 1, tests[i]);
 		owb = (int)write(fd, tests[i], strlen(tests[i]));
 		oer = errno;
-		printf("original written bytes : %d errno: %d\n", owb, errno);
+		printf("original written bytes : %d errno : %d\n", owb, errno);
 		mwb = (int)ft_write(fd, tests[i], strlen(tests[i]));
 		mer = errno;
-		printf("ft_write written bytes : %d errno: %d\n", mwb, errno);
+		printf("ft_write written bytes : %d errno : %d\n", mwb, errno);
 		assert((owb - mwb) == 0);
 		assert((oer - mer) == 0);
 		i++;
@@ -170,25 +174,117 @@ void	test_write()
 	printf("extra test write №1: %s\n", tests[i]);
 	owb = (int)write(fd, tests[i], strlen(tests[i]) - 1);
 	oer = errno;
-	printf("original written bytes : %d errno: %d\n", owb, errno);
+	printf("original written bytes : %d errno : %d\n", owb, errno);
 	mwb = (int)ft_write(fd, tests[i], strlen(tests[i]) - 1);
 	mer = errno;
-	printf("ft_write written bytes : %d errno: %d\n", mwb, errno);
+	printf("ft_write written bytes : %d errno : %d\n", mwb, errno);
 	assert((owb - mwb) == 0);
 	assert((oer - mer) == 0);
-	i++;
 	printf("extra test (invalid fd) write №2: %s\n", extra_test);
 	owb = (int)write(-1, extra_test, strlen(extra_test));
 	oer = errno;
-	printf("original written bytes : %d errno: %d\n", owb, errno);
+	printf("original written bytes : %d errno : %d\n", owb, errno);
 	errno = 0;
 	mwb = (int)ft_write(-1, extra_test, strlen(extra_test));
 	mer = errno;
-	printf("ft_write written bytes : %d errno: %d\n", mwb, errno);
+	printf("ft_write written bytes : %d errno : %d\n", mwb, errno);
 	assert((owb - mwb) == 0);
 	assert((oer - mer) == 0);
 	printf("ft_write: all tests OK\n");
 	close(fd);
+}
+
+#define BUFF_SIZE	8
+
+void	test_read()
+{
+	const char* const	tests[] =
+	{
+		"hello",
+		"foo",
+		"bar",
+		"",
+		"\n",
+		"hello world and foo bar",
+		NULL
+	};
+	int					i;
+	char				obuf[BUFF_SIZE];
+	char				mbuf[BUFF_SIZE];
+	int					ofd;
+	int					mfd;
+	int					efd;
+	int					obr;
+	int					mbr;
+	int					oer;
+	int					mer;
+	int					owb;
+	int					mwb;
+	int					osum;
+	int					msum;
+
+	i = 0;
+	ofd = open("ft_read_test_original", O_CREAT | O_RDWR | O_TRUNC, S_IRWXU);
+	mfd = open("ft_read_test_my", O_CREAT | O_RDWR | O_TRUNC, S_IRWXU);
+	while (tests[i] != NULL)
+	{
+		printf("test read №%d: %s\n", i + 1, tests[i]);
+		owb = (int)write(ofd, tests[i], strlen(tests[i]));
+		errno = 0;
+		lseek(ofd, -owb, SEEK_CUR);
+		obr = (int)read(ofd, obuf, BUFF_SIZE - 1);
+		obuf[obr] = '\0';
+		oer = errno;
+		printf("original bytes read : %d errno : %d buf : %s\n", obr, errno, obuf);
+		mwb = (int)write(mfd, tests[i], strlen(tests[i]));
+		errno = 0;
+		lseek(mfd, -mwb, SEEK_CUR);
+		mbr = (int)ft_read(mfd, mbuf, BUFF_SIZE - 1);
+		mbuf[mbr] = '\0';
+		mer = errno;
+		printf("ft_read bytes read  : %d errno : %d buf : %s\n", mbr, errno, mbuf);
+		assert((obr - mbr) == 0);
+		assert((oer - mer) == 0);
+		i++;
+	}
+	close(ofd);
+	close(mfd);
+	i--;
+	printf("extra test read (reading in parts) №1: %s\n", tests[i]);
+	efd = open("ft_read_test_extra", O_CREAT | O_RDWR | O_TRUNC, S_IRWXU);
+	owb = (int)write(efd, tests[i], strlen(tests[i]));
+	lseek(ofd, -owb, SEEK_CUR);
+	osum = 0;
+	printf("original buf : ");
+	while ((obr = read(efd, obuf, 1)) > 0)
+	{
+		osum += obr;
+		printf("%c ", obuf[0]);
+	}
+	printf("\n");
+	close(efd);
+	efd = open("ft_read_test_extra", O_RDONLY);
+	msum = 0;
+	printf("ft_read buf  : ");
+	while ((mbr = read(efd, mbuf, 1)) > 0)
+	{
+		msum += mbr;
+		printf("%c ", mbuf[0]);
+	}
+	printf("\n");
+	close(efd);
+	assert((osum - msum) == 0);
+	printf("extra test read (invalid fd) №2: %s\n", tests[i]);
+	obr = read(-1, obuf, 1);
+	oer = errno;
+	printf("original bytes read : %d errno : %d\n", obr, errno);
+	errno = 0;
+	mbr = read(-1, mbuf, 1);
+	mer = errno;
+	printf("ft_read bytes read  : %d errno : %d\n", mbr, errno);
+	assert((owb - mwb) == 0);
+	assert((oer - mer) == 0);
+	printf("ft_read: all tests OK\n");
 }
 
 int		main(void)
@@ -196,6 +292,7 @@ int		main(void)
 	// test_strlen();
 	// test_strcpy();
 	// test_strcmp();
-	test_write();
+	// test_write();
+	test_read();
 	return (0);
 }

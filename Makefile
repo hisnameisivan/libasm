@@ -6,7 +6,7 @@
 #    By: ivan <ivan@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/06 02:31:28 by ivan              #+#    #+#              #
-#    Updated: 2021/08/21 02:39:45 by ivan             ###   ########.fr        #
+#    Updated: 2021/08/23 03:20:34 by ivan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,9 @@ clean:
 fclean: clean
 	rm -f $(NAME) $(TESTNAME)
 	rm -f ft_write_test
+	rm -f ft_read_test_extra
+	rm -f ft_read_test_my
+	rm -f ft_read_test_original
 
 re: fclean all
 
