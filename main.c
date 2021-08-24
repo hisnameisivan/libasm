@@ -6,7 +6,7 @@
 /*   By: ivan <ivan@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/25 16:37:35 by ivan              #+#    #+#             */
-/*   Updated: 2021/08/23 03:19:07 by ivan             ###   ########.fr       */
+/*   Updated: 2021/08/24 23:13:35 by ivan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,11 @@ size_t	ft_strlen(const char *str);
 char	*ft_strcpy(char *dst, const char *src);
 int		ft_strcmp(const char *s1, const char *s2);
 ssize_t	ft_write(int fd, const void *buf, size_t count);
-ssize_t	ft_read(int fd, const void *buf, size_t count)
-{
-	char	*b;
-	b = (char *)buf;
-	return read(fd, (void *)b, count);
+ssize_t	ft_read(int fd, const void* buf, size_t count);
+char	*ft_strdup(const char *s) {
+	return strdup(s);
 }
-// ssize_t	ft_read(int fd, const void* buf, size_t count);
+// char	*ft_strdup(const char *s);
 
 void	test_strlen(void)
 {
@@ -194,7 +192,7 @@ void	test_write()
 	close(fd);
 }
 
-#define BUFF_SIZE	8
+#define BUF_SIZE	8
 
 void	test_read()
 {
@@ -209,8 +207,8 @@ void	test_read()
 		NULL
 	};
 	int					i;
-	char				obuf[BUFF_SIZE];
-	char				mbuf[BUFF_SIZE];
+	char				obuf[BUF_SIZE];
+	char				mbuf[BUF_SIZE];
 	int					ofd;
 	int					mfd;
 	int					efd;
@@ -232,14 +230,14 @@ void	test_read()
 		owb = (int)write(ofd, tests[i], strlen(tests[i]));
 		errno = 0;
 		lseek(ofd, -owb, SEEK_CUR);
-		obr = (int)read(ofd, obuf, BUFF_SIZE - 1);
+		obr = (int)read(ofd, obuf, BUF_SIZE - 1);
 		obuf[obr] = '\0';
 		oer = errno;
 		printf("original bytes read : %d errno : %d buf : %s\n", obr, errno, obuf);
 		mwb = (int)write(mfd, tests[i], strlen(tests[i]));
 		errno = 0;
 		lseek(mfd, -mwb, SEEK_CUR);
-		mbr = (int)ft_read(mfd, mbuf, BUFF_SIZE - 1);
+		mbr = (int)ft_read(mfd, mbuf, BUF_SIZE - 1);
 		mbuf[mbr] = '\0';
 		mer = errno;
 		printf("ft_read bytes read  : %d errno : %d buf : %s\n", mbr, errno, mbuf);
@@ -266,7 +264,7 @@ void	test_read()
 	efd = open("ft_read_test_extra", O_RDONLY);
 	msum = 0;
 	printf("ft_read buf  : ");
-	while ((mbr = read(efd, mbuf, 1)) > 0)
+	while ((mbr = ft_read(efd, mbuf, 1)) > 0)
 	{
 		msum += mbr;
 		printf("%c ", mbuf[0]);
@@ -279,12 +277,40 @@ void	test_read()
 	oer = errno;
 	printf("original bytes read : %d errno : %d\n", obr, errno);
 	errno = 0;
-	mbr = read(-1, mbuf, 1);
+	mbr = ft_read(-1, mbuf, 1);
 	mer = errno;
 	printf("ft_read bytes read  : %d errno : %d\n", mbr, errno);
-	assert((owb - mwb) == 0);
+	assert((obr - mbr) == 0);
 	assert((oer - mer) == 0);
 	printf("ft_read: all tests OK\n");
+}
+
+void	test_strdup()
+{
+	const char* const	tests[] =
+	{
+		"hello",
+		"foo",
+		"bar",
+		"",
+		"\n",
+		"hello world and foo bar",
+		NULL
+	};
+	int					i;
+	char				*buf;
+
+	i = 0;
+	while (tests[i] != NULL)
+	{
+		printf("test strdup №%d\n", i + 1);
+		buf = ft_strdup(tests[i]);
+		printf("original  : %s$	len : %u\n", tests[i], (unsigned int)strlen(tests[i]));
+		printf("ft_strdup : %s$	len : %u\n", buf, (unsigned int)strlen(buf));
+		free(buf);
+		i++;
+	}
+	printf("ft_strcpy: all tests OK\n");
 }
 
 int		main(void)
@@ -293,6 +319,7 @@ int		main(void)
 	// test_strcpy();
 	// test_strcmp();
 	// test_write();
-	test_read();
+	// test_read();
+	test_strdup();
 	return (0);
 }
