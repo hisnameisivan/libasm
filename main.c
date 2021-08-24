@@ -6,7 +6,7 @@
 /*   By: ivan <ivan@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/25 16:37:35 by ivan              #+#    #+#             */
-/*   Updated: 2021/08/24 23:13:35 by ivan             ###   ########.fr       */
+/*   Updated: 2021/08/24 23:20:21 by ivan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -310,7 +310,7 @@ void	test_strdup()
 		free(buf);
 		i++;
 	}
-	printf("ft_strcpy: all tests OK\n");
+	printf("ft_strdup: all tests OK\n");
 }
 
 int		main(void)
