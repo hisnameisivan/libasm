@@ -6,7 +6,7 @@
 /*   By: ivan <ivan@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/25 16:37:35 by ivan              #+#    #+#             */
-/*   Updated: 2021/08/24 23:20:21 by ivan             ###   ########.fr       */
+/*   Updated: 2021/09/01 10:16:03 by ivan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,7 @@ char	*ft_strcpy(char *dst, const char *src);
 int		ft_strcmp(const char *s1, const char *s2);
 ssize_t	ft_write(int fd, const void *buf, size_t count);
 ssize_t	ft_read(int fd, const void* buf, size_t count);
-char	*ft_strdup(const char *s) {
-	return strdup(s);
-}
-// char	*ft_strdup(const char *s);
+char	*ft_strdup(const char *s);
 
 void	test_strlen(void)
 {

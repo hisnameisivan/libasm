@@ -6,7 +6,7 @@
 #    By: ivan <ivan@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/06 02:31:28 by ivan              #+#    #+#              #
-#    Updated: 2021/08/24 22:53:56 by ivan             ###   ########.fr        #
+#    Updated: 2021/09/01 10:15:33 by ivan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ ASMSRC		= ft_strlen.s\
 			  ft_strcpy.s\
 			  ft_strcmp.s\
 			  ft_write.s\
-			  ft_read.s
+			  ft_read.s\
+			  ft_strdup.s
 
 TESTNAME	= test_libasm
 CC			= clang
