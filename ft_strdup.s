@@ -27,7 +27,6 @@ ft_strdup:
 	add rsi, 1
 	jmp CPY
 	RETURN:
-	add rdx, 1
 	mov [rdx], byte 0
 	pop rcx
 	pop rdx

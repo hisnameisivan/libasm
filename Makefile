@@ -6,7 +6,7 @@
 #    By: ivan <ivan@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/06 02:31:28 by ivan              #+#    #+#              #
-#    Updated: 2021/09/02 10:25:49 by ivan             ###   ########.fr        #
+#    Updated: 2022/02/07 02:56:20 by ivan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,7 +77,7 @@ test: $(TESTNAME) # $(NAME)
 	$(CC) $(CCFLAGS) -c -Itests/headers/ $< -o $@
 
 $(TESTNAME): $(TESTOBJ) $(NAME)
-	$(CC) $(CCFLAGS) $? -o $(TESTNAME)
+	$(CC) $(CCFLAGS) $(TESTOBJ) $(NAME) -o $(TESTNAME)
 
 # $(TESTNAME): $(TESTOBJ) $(NAME) # $(ASMOBJ)
 # 	$(CC) $(CCFLAGS) $? -o $(TESTNAME)
