@@ -6,13 +6,23 @@
 #    By: ivan <ivan@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/06 02:31:28 by ivan              #+#    #+#              #
-#    Updated: 2022/02/07 02:56:20 by ivan             ###   ########.fr        #
+#    Updated: 2021/09/02 10:25:49 by ivan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+KERNEL = $(shell uname -s)
+
+ifeq ($(KERNEL),Linux)
+	ASMFLAGS	= -f elf64
+	ASMDIR		= linux/
+endif
+ifeq ($(KERNEL),Darwin)
+	ASMFLAGS	= -f macho64
+	ASMDIR		= darwin/
+endif
+
 NAME		= libasm.a
 ASM			= nasm
-ASMFLAGS	= -f elf64
 CC			= clang
 CCFLAGS		= -Wall -Wextra -Werror
 
@@ -33,22 +43,16 @@ TESTSRC		= main.c\
 			  test_ft_write.c\
 			  test_ft_read.c\
 			  test_ft_strdup.c
+HEADERS		= headers/
 
-# HEADERSDIR  = tests/headers/
-# HEADERSSRC	= libasm.h\
-# 			  tests.h
-
-ASMOBJ		= $(ASMSRC:%.s=%.o)
-# HEADERS		= $(addprefix $(HEADERSDIR), $(HEADERSSRC))
+ASMS		= $(addprefix $(ASMDIR), $(ASMSRC))
+ASMOBJ		= $(ASMS:%.s=%.o)
 TESTS		= $(addprefix $(TESTDIR), $(TESTSRC))
-TESTOBJ	= $(TESTS:%.c=%.o)
+TESTOBJ		= $(TESTS:%.c=%.o)
 
 all: $(NAME)
 
-# $(ASMOBJ): $(ASMSRC)
-# 	$(ASM) $(ASMFLAGS) $(ASMSRC)
-
-./%.o: ./%.s
+./$(ASMDIR)%.o: ./$(ASMDIR)%.s
 	$(ASM) $(ASMFLAGS) $<
 
 $(NAME): $(ASMOBJ)
@@ -66,20 +70,12 @@ fclean: clean
 
 re: fclean all
 
-# bonus:
+test: $(TESTNAME)
 
-test: $(TESTNAME) # $(NAME)
-
-# $(TESTSOBJ): $(TESTS)
-# 	$(CC) $(CCFLAGS) -c $< -o $@
-
-./tests/%.o: ./tests/%.c
-	$(CC) $(CCFLAGS) -c -Itests/headers/ $< -o $@
+./$(TESTDIR)%.o: ./$(TESTDIR)%.c
+	$(CC) $(CCFLAGS) -c -I./$(TESTDIR)$(HEADERS) $< -o $@
 
 $(TESTNAME): $(TESTOBJ) $(NAME)
 	$(CC) $(CCFLAGS) $(TESTOBJ) $(NAME) -o $(TESTNAME)
 
-# $(TESTNAME): $(TESTOBJ) $(NAME) # $(ASMOBJ)
-# 	$(CC) $(CCFLAGS) $? -o $(TESTNAME)
-
-.PHONY: all clean fclean re bonus test
+.PHONY: all clean fclean re test

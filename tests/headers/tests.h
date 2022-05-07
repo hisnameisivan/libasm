@@ -25,6 +25,14 @@ static const char* const	g_tests[] =
 	NULL
 };
 
+typedef struct	s_io
+{
+	int			fd;
+	int			bytes;
+	int			err;
+	char		buf[BUF_SIZE];
+}				t_io;
+
 void	test_ft_strlen(void);
 void	test_ft_strcpy(void);
 void	test_ft_strcmp(void);

@@ -10,8 +10,8 @@ static void	main_test_ft_strdup()
 	{
 		printf("test strdup №%d\n", i + 1);
 		buf = ft_strdup(g_tests[i]);
-		printf("original  : %s$	len : %u\n", g_tests[i], (unsigned int)strlen(g_tests[i]));
-		printf("ft_strdup : %s$	len : %u\n", buf, (unsigned int)strlen(buf));
+		printf("original  : %s$	len : %d\n", g_tests[i], (int)strlen(g_tests[i]));
+		printf("ft_strdup : %s$	len : %d\n", buf, (int)strlen(buf));
 		free(buf);
 		i++;
 	}

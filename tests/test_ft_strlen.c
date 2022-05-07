@@ -8,8 +8,8 @@ static void	main_test_ft_strlen(void)
 	while (g_tests[i] != NULL)
 	{
 		printf("test strlen №%d: %s\n", i + 1, g_tests[i]);
-		printf("strlen    : %u\n", (unsigned int)strlen(g_tests[i]));
-		printf("ft_strlen : %u\n", (unsigned int)ft_strlen(g_tests[i]));
+		printf("strlen    : %d\n", (int)strlen(g_tests[i]));
+		printf("ft_strlen : %d\n", (int)ft_strlen(g_tests[i]));
 		assert((int)(strlen(g_tests[i]) - ft_strlen(g_tests[i])) == 0);
 		i++;
 	}
