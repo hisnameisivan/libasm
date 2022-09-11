@@ -50,11 +50,9 @@ static void	extra_test_ft_write_1(void)
 static void	extra_test_ft_write_2(void)
 {
 	const char	*extra_test = "extra";
-	int			fd;
 	t_io		original;
 	t_io		my;
 
-	fd = creat("ft_write_test", S_IRWXU);
 	printf("extra test (invalid fd) write №2: %s\n", extra_test);
 	original.bytes = (int)write(-1, extra_test, strlen(extra_test));
 	original.err = errno;
@@ -65,7 +63,6 @@ static void	extra_test_ft_write_2(void)
 	printf("ft_write written bytes : %d errno : %d\n", my.bytes, my.err);
 	assert((original.bytes - my.bytes) == 0);
 	assert((original.err - my.err) == 0);
-	close(fd);
 }
 
 void		test_ft_write(void)

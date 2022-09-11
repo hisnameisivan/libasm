@@ -43,33 +43,32 @@ static void	extra_test_ft_read_1(void)
 	t_io		original;
 	t_io		my;
 	int			wb;
-	int			osum;
-	int			msum;
+	int			rb;
 
 	printf("extra test read (reading in parts) №1: %s\n", extra_test);
 	original.fd = open("ft_read_test_extra", O_CREAT | O_RDWR | O_TRUNC, S_IRWXU);
 	wb = (int)write(original.fd, extra_test, strlen(extra_test));
 	lseek(original.fd, -wb, SEEK_CUR);
-	osum = 0;
+	original.bytes = 0;
 	printf("original buf : ");
-	while ((original.bytes = read(original.fd, original.buf, 1)) > 0)
+	while ((rb = read(original.fd, original.buf, 1)) > 0)
 	{
-		osum += original.bytes;
+		original.bytes += rb;
 		printf("%c ", original.buf[0]);
 	}
 	printf("\n");
 	close(original.fd);
 	my.fd = open("ft_read_test_extra", O_RDONLY);
-	msum = 0;
+	my.bytes = 0;
 	printf("ft_read buf  : ");
-	while ((my.bytes = ft_read(my.fd, my.buf, 1)) > 0)
+	while ((rb = ft_read(my.fd, my.buf, 1)) > 0)
 	{
-		msum += my.bytes;
+		my.bytes += rb;
 		printf("%c ", my.buf[0]);
 	}
 	printf("\n");
 	close(my.fd);
-	assert((osum - msum) == 0);
+	assert((original.bytes - my.bytes) == 0);
 }
 
 static void	extra_test_ft_read_2(void)

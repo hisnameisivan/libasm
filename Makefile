@@ -72,10 +72,13 @@ re: fclean all
 
 test: $(TESTNAME)
 
+test-run: test
+	./$(TESTNAME)
+
 ./$(TESTDIR)%.o: ./$(TESTDIR)%.c
 	$(CC) $(CCFLAGS) -c -I./$(TESTDIR)$(HEADERS) $< -o $@
 
 $(TESTNAME): $(TESTOBJ) $(NAME)
 	$(CC) $(CCFLAGS) $(TESTOBJ) $(NAME) -o $(TESTNAME)
 
-.PHONY: all clean fclean re test
+.PHONY: all clean fclean re test test-run
