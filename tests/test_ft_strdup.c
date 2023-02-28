@@ -12,6 +12,7 @@ static void	main_test_ft_strdup()
 		buf = ft_strdup(g_tests[i]);
 		printf("original  : %s$	len : %d\n", g_tests[i], (int)strlen(g_tests[i]));
 		printf("ft_strdup : %s$	len : %d\n", buf, (int)strlen(buf));
+		assert((int)(strlen(g_tests[i]) - strlen(buf)) == 0);
 		free(buf);
 		i++;
 	}
