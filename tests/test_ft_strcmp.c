@@ -28,8 +28,8 @@ static void	main_test_ft_strcmp(void)
 
 static void	extra_test_ft_strcmp_1(void)
 {
-	const char	*first = "привет";
-	const char	*second = "мир";
+	const char	*first = "привет";	// ""
+	const char	*second = "мир";	// "мир"
 
 	printf("extra test strcmp №1\n");
 	printf("first string  : %s$\n", first);
